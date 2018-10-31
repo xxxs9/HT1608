@@ -8,4 +8,8 @@ public class branchTest {
 	public static void test2() {
 		System.out.println("master update2");
 	}
+	
+	public static void test1() {
+		System.out.println("only test have");
+	}
 }
