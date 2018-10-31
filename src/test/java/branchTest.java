@@ -16,4 +16,8 @@ public class branchTest {
 	public static void master() {
 		System.out.println("master have update2");
 	}
+	
+	public static void test3() {
+		System.out.println("master test3");
+	}
 }
