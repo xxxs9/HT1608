@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tarena.ht.mapper.UserMotionMapper">
+	
+	<delete id="deleteUserMotion">
+		delete from user_motion where user_motion_id in(
+			<foreach collection="array" item="id" separator=",">
+				#{id}
+			</foreach>
+		)
+	</delete>
+	
+	<!--新增用户扩展信息  -->
+	<insert id="saveUserMotion" >
+		insert into user_motion values(
+			#{userMotionId},
+			#{averageStep},
+			#{motionNum},
+			#{averageJump},
+			#{practice},
+			#{stepStatus},
+			#{createBy,jdbcType=VARCHAR},
+			#{createTime,jdbcType=DATE},
+			#{updateBy,jdbcType=VARCHAR},
+			#{updateTime,jdbcType=DATE}
+		)
+	</insert>
+	
+	<update id="updateUserMotion">
+		update user_motion
+			set user_motion.average_step = #{averageStep},
+				user_motion.motion_num = #{motionNum},
+				user_motion.average_jump = #{averageJump},
+				user_motion.practice = #{practice},
+				user_motion.step_status = #{stepStatus},
+				
+				user_motion.update_by = #{updateBy},
+				user_motion.update_time = #{updateTime}
+		where user_motion.user_motion_id = #{userMotinoId}
+	</update>
+	
+</mapper>

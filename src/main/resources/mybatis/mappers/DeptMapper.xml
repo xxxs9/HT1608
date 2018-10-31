@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tarena.ht.mapper.DeptMapper">
+	<!--sql编写的思路 需要显示部门的全部信息，并且需要显示上级部门的ID和上级部门的名称 -->
+	<select id="findDeptList" resultMap="deptRM">
+		SELECT * FROM
+		(SELECT * FROM dept_p)d
+		LEFT JOIN
+		(SELECT dept_id AS p_id,dept_name AS p_name FROM dept_p)p
+		ON d.parent_id=p.p_id
+		ORDER BY dept_id;
+	</select>
+	<!--封装结果集 -->
+	<resultMap type="Dept" id="deptRM" autoMapping="true">
+		<id property="deptId" column="DEPT_ID" />
+		<!--封装上级部门 一对一 -->
+		<association property="parentDept" javaType="Dept">
+			<id property="deptId" column="P_ID" />
+			<result property="deptName" column="P_NAME" />
+		</association>
+	</resultMap>
+
+	<!--修改状态 -->
+	<update id="updateState">
+		update dept_p set state=#{state} where dept_id in(
+		<foreach collection="deptIds" item="deptId" separator=",">
+			#{deptId}
+		</foreach>
+		)
+	</update>
+
+	<!--批量删除 -->
+	<delete id="deleteDepts">
+		delete from dept_p where dept_id=(
+		<foreach collection="array" item="deptId" separator=",">
+			#{deptId}
+		</foreach>
+		)
+	</delete>
+
+	<!--添加部门信息 简化 只添加有效数据 -->
+	<insert id="saveDept">
+		insert  into `dept_p`(`DEPT_ID`,`PARENT_ID`,`DEPT_NAME`,`STATE`)
+		values(#{deptId},
+		#{parentDept.deptId},
+		#{deptName},
+		#{state}
+		)
+	</insert>
+
+	<!--根据部门ID查询信息 -->
+	<select id="findDeptByID" resultMap="deptRM">
+		SELECT * FROM
+		(SELECT * FROM dept_p)d
+		LEFT JOIN
+		(SELECT dept_id AS p_id,dept_name AS p_name FROM dept_p)p
+		ON d.parent_id=p.p_id
+		WHERE dept_id=#{deptId}
+	</select>
+</mapper>

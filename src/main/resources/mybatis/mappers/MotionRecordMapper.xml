@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tarena.ht.mapper.MotionRecordMapper">
+	
+	<select id="findAllMotionRecordList" resultMap="motionRecordRM">
+		SELECT * FROM motion_record
+	</select>
+	
+	<select id="findMotionRecordListByUserId" resultMap="motionRecordRM">
+		SELECT motion_record.motion_record_id,
+			motion_record.start_time,
+			motion_record.complete_num,
+			motion_record.end_time,
+			motion_record.user_id,
+			motion_record.goal_id
+		FROM motion_record 
+		WHERE motion_record.user_id = #{userId}
+	</select>
+	
+	<resultMap type="MotionRecord" id="motionRecordRM" autoMapping="true">
+		<id property="motionRecordId" column="motion_record_id"/>
+		<result property="startTime" column="start_time"/>
+		<result property="completeNum" column="complete_num"/>
+		<result property="endTime" column="end_time"/>
+
+		<!--封装用户信息  -->
+		<association property="user" column="user_id"
+			select="cn.tarena.ht.mapper.UserMapper.findUserByUserId"/>
+		
+		<!--封装用户运动信息  -->
+		<association property="goal" column="goal_id"
+			select="cn.tarena.ht.mapper.GoalMapper.findGoalByGoalId"/>
+	</resultMap>
+	
+	<!-- 更新运动记录 -->
+	<update id="updateMotionRecord">
+		update motion_record
+			set motion_record.goal = #{goal.goalId},
+				motion_record.start_time = #{startTime},
+				motion_record.complete_num = #{completeNum},
+				motion_record.end_time = #{endTime},
+				motion_record.update_by = #{updateBy},
+				motion_record.update_time = #{updateTime}
+		where motion_record.motion_record_id = #{motionRecordId}
+	</update>
+	
+	<!--运动记录删除  -->
+	<delete id="deleteMotionRecords">
+		delete from motion_record where motion_record_id in(
+			<foreach collection="array" item="id" separator=",">
+				#{id}
+			</foreach>
+		)
+	</delete>
+	
+	<!--新增运动记录  -->
+	<insert id="saveMotionRecord">
+		insert into motion_record values(
+			#{motionRecordId},
+			#{user.userId},
+			#{goal.goalId},
+			#{startTime},
+			#{completeNum},
+			#{endTime},
+			#{createBy,jdbcType=VARCHAR},
+			#{createTime,jdbcType=DATE},
+			#{updateBy,jdbcType=VARCHAR},
+			#{updateTime,jdbcType=DATE}
+		)
+	</insert>
+	
+</mapper>

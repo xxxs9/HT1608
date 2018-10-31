@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tarena.ht.mapper.UserMapper">
+	
+	<select id="findUserList" resultMap="userRM">
+		SELECT user.user_id,
+			user.username,
+			user.openname,
+			user.openId,
+			user_info.USER_INFO_ID,
+			user_info.NAME,
+			user_info.CARD_NO,
+			user_info.BIRTHDAY,
+			user_info.GENDER,
+			user_info.TELEPHONE,
+			user_info.USER_LEVEL,
+			user_info.REMARK,
+			user_motion.USER_MOTION_ID,
+			user_motion.AVERAGE_STEP,
+			user_motion.MOTION_NUM,
+			user_motion.AVERAGE_JUMP,
+			user_motion.PRACTICE,
+			user_motion.STEP_STATUS
+		FROM user
+		LEFT JOION user_info
+		ON user.user_id = user_info.user_info_id
+		LEFT JOION user_motion
+		ON user.user_id = user_motion.user_motion_id
+	</select>
+	
+	<select id="findUserByUserId" resultMap="userRM">
+		SELECT user.user_id,
+			user.username,
+			user.openname,
+			user.openId,
+			user_info.USER_INFO_ID,
+			user_info.NAME,
+			user_info.CARD_NO,
+			user_info.BIRTHDAY,
+			user_info.GENDER,
+			user_info.TELEPHONE,
+			user_info.USER_LEVEL,
+			user_info.REMARK,
+			user_motion.USER_MOTION_ID,
+			user_motion.AVERAGE_STEP,
+			user_motion.MOTION_NUM,
+			user_motion.AVERAGE_JUMP,
+			user_motion.PRACTICE,
+			user_motion.STEP_STATUS
+		FROM user
+		INNER JOIN user_info
+		ON user.user_id = user_info.user_info_id AND user_info.user_info_id = #{userId}
+		INNER JOIN user_motion
+		ON user.user_id = user_motion.user_motion_id AND user_motion.user_motion_id = #{userId}
+	</select>
+	
+	<select id="findUserByOpenId" resultMap="userRM">
+		SELECT user.user_id,
+			user.username,
+			user.openname,
+			user.openId,
+			user_info.USER_INFO_ID,
+			user_info.NAME,
+			user_info.CARD_NO,
+			user_info.BIRTHDAY,
+			user_info.GENDER,
+			user_info.TELEPHONE,
+			user_info.USER_LEVEL,
+			user_info.REMARK,
+			user_motion.USER_MOTION_ID,
+			user_motion.AVERAGE_STEP,
+			user_motion.MOTION_NUM,
+			user_motion.AVERAGE_JUMP,
+			user_motion.PRACTICE,
+			user_motion.STEP_STATUS
+		FROM user
+		INNER JOIN user_info
+				ON user.user_id = user_info.user_info_id AND user.openId = #{openId}
+		INNER JOIN user_motion
+		ON user.user_id = user_motion.user_motion_id AND user.openId = #{openId}
+	</select>
+	
+	<!--UserRM的封装  -->
+	<resultMap type="User" id="userRM" autoMapping="true">
+		<id property="userId" column="USER_ID"/>
+		<result property="username" column="username"/>
+		<result property="openname" column="openname"/>
+		<result property="openId" column="openId"/>
+		
+		<!--封装用户扩展信息  -->
+		<association property="userInfo" javaType="UserInfo">
+			<id property="userInfoId" column="USER_INFO_ID"/>
+			<result property="name" column="NAME"/>
+			<result property="cardNo" column="CARD_NO"/>
+			<result property="birthday" column="BIRTHDAY"/>
+			<result property="gender" column="GENDER"/>
+			<result property="telephone" column="TELEPHONE"/>
+			<result property="userLevel" column="USER_LEVEL"/>
+			<result property="remark" column="REMARK"/>
+		</association>
+		
+		<!--封装用户运动信息  -->
+		<association property="userMotion" javaType="UserMotion">
+			<id property="userMotionId" column="USER_MOTION_ID"/>
+			<result property="averageStep" column="AVERAGE_STEP"/>
+			<result property="motionNum" column="MOTION_NUM"/>
+			<result property="averageJump" column="AVERAGE_JUMP"/>
+			<result property="practice" column="PRACTICE"/>
+			<result property="stepStatus" column="STEP_STATUS"/>
+		</association>
+	</resultMap>
+	
+	<!--用户删除  -->
+	<delete id="deleteUsers">
+		delete from user where user_id in(
+			<foreach collection="array" item="id" separator=",">
+				#{id}
+			</foreach>
+		)
+	
+	</delete>
+	
+	<!--新增用户  -->
+	<insert id="saveUser">
+		insert into user values(
+			#{userId},
+			#{username},
+			#{password},
+			#{state},
+			#{openname},
+			#{openId},
+		<!--#{userInfo.userInfoId},
+			#{userMotion.userMotionId}, -->
+			#{createBy,},
+			#{createTime},
+			#{updateBy},
+			#{updateTime}
+		)
+	</insert>
+	
+	<update id="updateUser">
+		update user
+			set user.username = #{username},
+				user.openname = #{openname},
+				user.update_by = #{updateBy},
+				user.update_time = #{updateTime}
+		where user.user_id = #{userId}
+	</update>
+	
+	
+</mapper>

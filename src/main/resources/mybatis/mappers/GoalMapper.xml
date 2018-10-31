@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tarena.ht.mapper.GoalMapper">
+	
+	<!-- 目标列表 -->
+	<select id="findAllGoalList" resultMap="goalRM">
+		select * from goal 
+	</select>
+	
+	<!-- 单个目标 -->
+	<select id="findGoalByGoalId" resultMap="goalRM">
+		select	goal.goal_id,
+				goal.goal_type,
+				goal.goal_name,
+				goal.goal_num
+		from goal 
+		where goal.goal_id = #{goalId}
+	</select>
+	
+	<!-- goalRM封装 -->
+	<resultMap type="Goal" id="goalRM" autoMapping="true">
+		<id property="goalId" column="goal_id"/>
+		<result property="goalType" column="goal_type"/>
+		<result property="goalName" column="goal_name"/>
+		<result property="goalNum" column="goal_num"/>
+	</resultMap>
+	
+	<!--更新目标 -->
+	<update id="updateGoal">
+		update goal
+			set goal.goal_type = #{goal.goalType},
+				goal.goal_name = #{goal.goalName},
+				goal.goal_num = #{goal.goalNum},
+				goal.update_by = #{goal.updateBy},
+				goal.update_time = #{goal.updateTime}
+		where goal.goal_id = #{goal.goalId}
+	</update>
+	
+	<!--目标删除  -->
+	<delete id="deleteGoals">
+		delete from goal where goal_id in(
+			<foreach collection="array" item="id" separator=",">
+				#{id}
+			</foreach>
+		)
+	</delete>
+	
+	<!--新增目标  -->
+	<insert id="saveGoal">
+		insert into goal values(
+			#{goalId},
+			#{goalType},
+			#{goalName},
+			#{goalNum},
+			#{createBy,jdbcType=VARCHAR},
+			#{createTime,jdbcType=DATE},
+			#{updateBy,jdbcType=VARCHAR},
+			#{updateTime,jdbcType=DATE}
+		)
+	</insert>
+	
+	
+	
+	
+</mapper>
