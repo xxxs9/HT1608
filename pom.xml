@@ -12,6 +12,7 @@
 		<junit.version>4.12</junit.version>
 		<spring.version>4.2.3.RELEASE</spring.version>
 			
+			
 		<mybatis.version>3.2.8</mybatis.version>
 		<mybatis.spring.version>1.2.2</mybatis.spring.version>
 		<mybatis.paginator.version>1.2.15</mybatis.paginator.version>
@@ -151,13 +152,6 @@
 			<artifactId>json-lib</artifactId>
 			<version>2.4</version>
 			<classifier>jdk15</classifier>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>
-				com.springsource.org.codehaus.jackson.mapper
-			</artifactId>
-			<version>1.0.0</version>
 		</dependency>
 	</dependencies>
 	<build>
