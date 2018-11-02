@@ -30,30 +30,16 @@
 		ON user.user_id = user_motion.user_motion_id
 	</select>
 	
-	<select id="findUserByUserId" resultMap="userRM">
-		SELECT user.user_id,
-			user.username,
-			user.openname,
-			user.openId,
-			user_info.USER_INFO_ID,
-			user_info.NAME,
-			user_info.CARD_NO,
-			user_info.BIRTHDAY,
-			user_info.GENDER,
-			user_info.TELEPHONE,
-			user_info.USER_LEVEL,
-			user_info.REMARK,
-			user_motion.USER_MOTION_ID,
-			user_motion.AVERAGE_STEP,
-			user_motion.MOTION_NUM,
-			user_motion.AVERAGE_JUMP,
-			user_motion.PRACTICE,
-			user_motion.STEP_STATUS
+	<select id="findUserByUserId" resultType="cn.tarena.ht.pojo.User">
+		SELECT *
 		FROM user
-		INNER JOIN user_info
-		ON user.user_id = user_info.user_info_id AND user_info.user_info_id = #{userId}
-		INNER JOIN user_motion
-		ON user.user_id = user_motion.user_motion_id AND user_motion.user_motion_id = #{userId}
+		WHERE user_id = #{userId}
+	</select>
+	
+	<select id="findUserByUnionId" resultType="cn.tarena.ht.pojo.User">
+		SELECT *
+		FROM user
+		WHERE union_id = #{unionId}
 	</select>
 	
 	<select id="findUserByOpenId" resultMap="userRM">
@@ -124,16 +110,12 @@
 	
 	<!--新增用户  -->
 	<insert id="saveUser">
-		insert into user values(
+		insert into user(user_id,username,password,union_id,create_by,create_time,update_by,update_time) values(
 			#{userId},
 			#{username},
 			#{password},
-			#{state},
-			#{openname},
 			#{openId},
-		<!--#{userInfo.userInfoId},
-			#{userMotion.userMotionId}, -->
-			#{createBy,},
+			#{createBy},
 			#{createTime},
 			#{updateBy},
 			#{updateTime}

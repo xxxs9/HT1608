@@ -8,9 +8,6 @@ public class User extends BaseEntity{
 	private int state;				//1启用 2关闭
 	private String openName;		//微信名
 	private String openId;			//一对微信唯一标识
-	private UserInfo userInfo;  	//一对一关联——外键约束
-	private UserMotion userMotion;  //一对一关联——外键约束
-	
 	
 	public String getUserId() {
 		return userId;
@@ -36,12 +33,6 @@ public class User extends BaseEntity{
 	public void setState(int state) {
 		this.state = state;
 	}
-	public UserInfo getUserInfo() {
-		return userInfo;
-	}
-	public void setUserInfo(UserInfo userInfo) {
-		this.userInfo = userInfo;
-	}
 	public String getOpenId() {
 		return openId;
 	}
@@ -54,14 +45,5 @@ public class User extends BaseEntity{
 	public void setOpenName(String openName) {
 		this.openName = openName;
 	}
-	public UserMotion getUserMotion() {
-		return userMotion;
-	}
-	public void setUserMotion(UserMotion userMotion) {
-		this.userMotion = userMotion;
-	}
 	
-	
-	
-	  
 }

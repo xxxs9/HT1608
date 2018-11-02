@@ -9,6 +9,8 @@ public interface UserMapper {
 	
 	public User findUserByUserId(String userId);
 	
+	public User findUserByUnionId(String unionId);
+	
 	public User findUserByOpenId(String openId);
 	
 	public void updateUser(User user);

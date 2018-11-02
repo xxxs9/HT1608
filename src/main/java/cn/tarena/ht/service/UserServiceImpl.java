@@ -11,8 +11,6 @@ import cn.tarena.ht.mapper.UserInfoMapper;
 import cn.tarena.ht.mapper.UserMapper;
 import cn.tarena.ht.mapper.UserMotionMapper;
 import cn.tarena.ht.pojo.User;
-import cn.tarena.ht.pojo.UserInfo;
-import cn.tarena.ht.pojo.UserMotion;
 import cn.tarena.ht.utils.ServletResult;
 
 @Service
@@ -69,6 +67,10 @@ public class UserServiceImpl implements UserService {
 		return userMapper.findUserList();
 	}
 	
+	public User findUserByUnionId(String unionId){
+		return userMapper.findUserByUnionId(unionId);
+	}
+	
 	public User findUserByUserId(String userId){
 		return userMapper.findUserByUserId(userId);
 	}
@@ -82,21 +84,10 @@ public class UserServiceImpl implements UserService {
 	public void saveUser(User user) {
 		String uuid = UUID.randomUUID().toString();
 		// 获取userInfo中的数据
-		UserInfo userInfo = user.getUserInfo();
-		UserMotion userMotion = user.getUserMotion();
 		
 		user.setUserId(uuid);
 		user.setState(1);
 		user.setCreateTime(new Date());
-
-		userInfo.setUserInfoId(uuid);
-		userInfo.setCreateTime(new Date());
-		
-		userMotion.setUserMotionId(uuid);
-		userMotion.setCreateTime(new Date());
-		
-		userInfoMapper.saveUserInfo(userInfo);
-		userMotionMapper.saveUserMotion(userMotion);
 		userMapper.saveUser(user);
 		
 	}
@@ -109,21 +100,11 @@ public class UserServiceImpl implements UserService {
 		
 		String uuid = UUID.randomUUID().toString();
 		// 获取userInfo中的数据
-		UserInfo userInfo = user.getUserInfo();
-		UserMotion userMotion = user.getUserMotion();
 		
 		user.setUserId(uuid);
 		user.setState(1);
 		user.setCreateTime(new Date());
 
-		userInfo.setUserInfoId(uuid);
-		userInfo.setCreateTime(new Date());
-		
-		userMotion.setUserMotionId(uuid);
-		userMotion.setCreateTime(new Date());
-		
-		userInfoMapper.saveUserInfo(userInfo);
-		userMotionMapper.saveUserMotion(userMotion);
 		userMapper.saveUser(user);
 		
 		return user;
@@ -135,20 +116,9 @@ public class UserServiceImpl implements UserService {
 	 */
 	private User update(User user){
 		
-		UserInfo userInfo = user.getUserInfo();
-		UserMotion userMotion = user.getUserMotion();
-		
 		user.setUpdateTime(new Date());
 		user.setUpdateBy(user.getUserId());
 		userMapper.updateUser(user);
-		
-		userInfo.setUpdateTime(new Date());
-		userInfo.setUpdateBy(user.getUserId());
-		userInfoMapper.updateUserInfo(userInfo);
-		
-		userMotion.setUpdateTime(new Date());
-		userMotion.setUpdateBy(user.getUserId());
-		userMotionMapper.updateUserMotion(userMotion);
 		
 		return user;
 	}

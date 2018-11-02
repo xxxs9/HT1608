@@ -69,24 +69,6 @@ public class UserController {
 	}
 	
 	
-	//测试
-//	@RequestMapping("cs")
-	public void save(){
-		String userId = "7c2960fa-dcbd-47ee-9bf3-1c75a6695c6f";
-		User user = userService.findUserByUserId(userId);
-		UserInfo userInfo = user.getUserInfo();
-//		User user = new User();
-//		UserInfo userInfo = new UserInfo();
-//		UserMotion userMotion = new UserMotion();
-//		user.setUsername("cs002");
-//		user.setUserInfo(userInfo);
-//		user.setUserMotion(userMotion);
-//		//新增用户
-//		userService.saveUser(user);
-		
-		//转向用户列表页面
-//		return "redirect:/sysadmin/user/list";
-	}
 	
 //	@RequestMapping("list")
 	public String userList(Model model){

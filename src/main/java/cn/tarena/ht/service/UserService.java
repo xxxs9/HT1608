@@ -14,6 +14,8 @@ public interface UserService {// throws Exception
 	public List<User> findUserList();
 	
 	public User findUserByUserId(String userId);
+	
+	public User findUserByUnionId(String unionId);
 
 	public void deleteUsers(String[] userIds);
 
