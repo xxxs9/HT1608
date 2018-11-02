@@ -5,7 +5,7 @@ public class BranchTest {
 		System.out.println("master test one");
 	}
 	
-	public void masterTest2(){
+	public void masterTest1(){
 		System.out.println("master test one");
 	}
 }
